@@ -1,8 +1,24 @@
-# Git Workflow
+# Principles
+
+## CODE MANAGEMENT PRINCIPLES
+
+O desenvolvimento de aplicações na SumOne passa pelos seguintes princípios:
+
+* **In GIT We Push**
+Nós damos push, todo dia, toda hora, compulsivamente. 
+Dessa forma, mantemos sempre nosso trabalho seguro e podemos trabalhar em equipe efetivamente.
+
+* **GIT UP and Get on up**
+Usamos a gem [**git-up**](https://github.com/aanand/git-up) para nos mantermos atualizados e sermos bons cidadãos, nós não "merjamos", "rebaseamos".
+
+
+# Workflow
+
+## Git Workflow
 
 Para começar uma nova Feature associado a uma issue é necessário seguir os seguintes passos:
 
-## Criando nova Feature
+### Criando nova Feature
 
 Garanta que o seu repositório de Development esteja atualizado:
 
