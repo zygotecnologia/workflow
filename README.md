@@ -11,24 +11,19 @@ aquilo em que somos ótimos: criar produtos que mudam o mundo.
 ## Conteúdo
 
 1. [Gestão de Projetos](#project-management) 
-
   * [Práticas](#project-practices)
   * [Issues e Boards](#project-issues)
 2. [Gestão de Código](#code-management) 
-
   * [Git](#code-git)
   * [Versionamento](#code-versioning)
 3. [Linguagens e Frameworks](#languages) 
-
   * [Ruby](#ruby)
   * [Rails](#rails)
 4. [Práticas e Metodologias](#methodologies) 
-
   * [Continuous Integration](#ci)
   * [Test-Driven Development](#tdd)
   * [Testes e Coverage](#tests)
 5. [Guias Práticos](#practical-guides) 
-
   * [Git Workflow](#git-workflow)
 
 ## Contribuindo com nosso workflow
@@ -133,7 +128,7 @@ de versão, sendo definido o seguinte:
 
 Esse esquema fecha bem com os conceitos do _git flow_ que comentamos antes.
 
-# <a name="languages-and-frameworks">Linguagens e Frameworks
+# <a name="languages">Linguagens e Frameworks
 
 Para cada linguagem e framework temos um conjunto de regras e boas práticas.
 Siga as boas práticas para não ser barrado pelo QA :)
@@ -187,7 +182,8 @@ As boas práticas e regras que usamos quando usamos Ruby são as seguintes:
 O stack padrão que usamos no Rails, para resolver cada tipo de problema está 
 listado abaixo:
 
-| **Problema** | **Gem** |
+| Problema | Gem |
+| :------- | :-- |
 | Organizar as gems de assets | [Rails Assets](https://rails-assets.org/) |
 | Templating | [ERB](http://ruby-doc.org/stdlib-2.2.0/libdoc/erb/rdoc/ERB.html) (está aqui só para ninguém nunca usar HAML) |
 | Melhoria de CSS | [SASS](http://sass-lang.com/) |
@@ -235,7 +231,7 @@ Como regra geral, testamos apenas **Testes de Integração** e de **Models**.
 
 Miramos em 95% de coverage no código.
 
-# <a name="practical-guide">Guias Práticos
+# <a name="practical-guides">Guias Práticos
 
 ## <a name="git-workflow">Git Workflow
 
