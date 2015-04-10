@@ -103,7 +103,7 @@ Com relação ao Git, usamos as seguintes práticas:
   pessoa do singular: "Fiz o sistema de gestão de notícias", 
   "Arrumei o bug #22", "Tentei fazer ..."
 
-  * As mensagens de commit são sempre em português.
+  * As mensagens de commit são sempre em inglês.
 
   * Para organização dos _branches_, usamos o modelo 
   [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/), com a
