@@ -15,7 +15,8 @@ aquilo em que somos ótimos: criar produtos que mudam o mundo.
   * [Issues e Boards](#project-issues)
 2. [Gestão de Código](#code-management) 
   * [Git](#code-git)
-  * [Versionamento](#code-versioning)
+    * [Criando uma nova feature](#git-workflow-feature)
+    * [Code Review e Merge](#git-workflow-merge)
 3. [Linguagens e Frameworks](#languages) 
   * [Ruby](#ruby)
   * [Rails](#rails)
@@ -23,9 +24,7 @@ aquilo em que somos ótimos: criar produtos que mudam o mundo.
   * [Continuous Integration](#ci)
   * [Test-Driven Development](#tdd)
   * [Testes e Coverage](#tests)
-5. [Guias Práticos](#practical-guides) 
-  * [Git Workflow](#git-workflow)
-
+    
 ## Contribuindo com nosso workflow
 O workflow só será revisto durante duas datas pré-determinadas:
 
@@ -48,7 +47,7 @@ todas as práticas, fazemos nosso próprio mix.
 
 As práticas que utilizamos na SumOne são:
 
-* **Papéis**: Product Owner, Scrum Master
+* **Papéis**: Product Owner
 
 * **Product Backlog**: Um documento que mostra as funcionalidades desejadas do
   produto, contendo **Objetivo**, **Descrição e Requisitos**, 
@@ -70,7 +69,7 @@ As práticas que utilizamos na SumOne são:
   _sprint planning_, a partir do método 
   [Planning Poker](http://en.wikipedia.org/wiki/Planning_poker).
 
-* **SCRUM Place**: Um lugar no escritório com um sofá, um quadro para discussão
+* **SCRUM Place**: Um lugar no escritório com um quadro para discussão
   e a _SCRUM Board_ com um _Burndown Chart_.
 
 * **SCRUM Board**: Um quadro contendo as _pipelines_ do sprint: _to do_, 
@@ -79,59 +78,112 @@ As práticas que utilizamos na SumOne são:
 * **Burndown Chart**: O jeito mais fácil de ver se o sprint está indo tão 
   rápido quanto o combinado.
 
+* **Collective Ownership**: Todos são ao mesmo tempo responsáveis e donos do
+  projeto e sua arquitetura.
+
+* **Code Review**: Colocando em prática o _Collective Ownership_. Todo código
+  é revisado pela equipe antes de ser colocado em produção.
+
+* **Deploy Contínuo**: Realizamos diversos deploys por dia.
+
 Todos os tópicos podem ser consultados na _Wikipedia_ :)
 
 ## <a name="project-issues">Issues e Boards
 
-Para manter o time todo atualizado do que está acontecendo no projeto e o que
-está por vir, usamos os [issues](https://guides.github.com/features/issues/) do
-GitHub, para _features_, _sprint tasks_, _bugs_ e _ideas_.
-
-Usamos uma extensão do Chrome chamada [ZenHub](https://www.zenhub.io/) para
-organizar as _pipelines_ da mesma forma que na nossa _scrum board_.
+Para manter o time todo atualizado do que está acontecendo no projeto, usamos os [issues](https://guides.github.com/features/issues/) do
+GitHub, para _features_, _sprint tasks_ e _bugs_.
 
 # <a name="code-management">Gestão de Código
 
 ## <a name="code-git">Git
+
 Utilizamos [Git](http://git-scm.com/) para fazer a gestão do nosso código.
 
-Com relação ao Git, usamos as seguintes práticas:
+### <a name="git-workflow-feature">Criando uma nova feature
 
-  * Usamos a gem _git up_ para dar um update no nosso repositório local.
+A cada nova feature, criamos uma branch chamada `feature/something`, com um nome descritivo
+da funcionalidade que estamos desenvolvendo (em inglês). Essa branch deve ser criada a partir
+da `master`.
 
-  * Fazemos nossas mensagens de commit sempre no pretérito, usando a primeira
-  pessoa do singular: "Fiz o sistema de gestão de notícias", 
-  "Arrumei o bug #22", "Tentei fazer ..."
+```
+git checkout master
+git checkout -b feature/something
+git push -u
+```
 
-  * As mensagens de commit são sempre em inglês.
+Escreva o código e faça seus commits. Procure fazer commits logicamente separados para facilitar
+o entendimento da evolução do código. Você pode utilizar o `git add -p` para adicionar apenas
+partes das suas alterações ao índice, antes de fazer seu commit.
 
-  * Para organização dos _branches_, usamos o modelo 
-  [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/), com a
-  excessão de que ao invés de fazermos um _merge_ da _feature_ que estamos
-  trabalhando com a branch _develop_, nós criamos um _pull request_ no GitHub
-  para esse fim.
+```
+git add -p
+git commit
+```
 
-  * Antes de criar um Pull Request, faça um _rebase_ da branch _develop_ com a
-  sua _feature branch_ para garantir que seu código está _up to date_ e evitar
-  conflitos no pull request.
+Nossas [mensagens de commit](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
+são sempre no presente, em inglês. A mensagem deve conter na
+primeira linha um resumo do commit, em no máximo 50 caracteres, separada por uma linha em
+branco e os detalhes da mudança. Todas as linhas devem possuir no máximo 72 caracteres.
 
-Para mais informações, veja o guia prático [Git Workflow](#git-workflow)
+```
+Notify users about their status.
 
-## <a name="code-versioning">Versionamento
+* More details about this commit.
+* Much more details about this commit.
 
-Usamos o sistema [Semantic Versioning 2.0.0](http://semver.org/) para controle
-de versão, sendo definido o seguinte:
+http://github.com/sumoners/my-project/issues/123
+```
 
-  * **Hotfixes** mudam o patch: 0.0.X
-  * **Releases** mudam o minor: 0.X.0
-  * **Marketing** muda a major: X.0.0
+Sempre que algo novo surgir na `master`, você precisar fazer um `git rebase` na sua branch.
+Dessa forma a arvore de commits do repositório permanecerá sempre linear.
 
-Esse esquema fecha bem com os conceitos do _git flow_ que comentamos antes.
+```
+git fetch origin
+git rebase origin/master
+```
+
+Ao finalizar suas alterações, caso tenha executado diversos commits, organize-os em commits
+lógicos e completos com um [`git rebase` interativo](https://help.github.com/articles/about-git-rebase/).
+Você não deve ter commits como "Fix rubocop issues".
+
+```
+git rebase -i origin/master
+```
+
+Caso você já tenha enviado suas alterações para o servidor anteriormente, você precisará forçar o
+envio após executar qualquer rebase. Isso acontece pois a árvore de commits foi alterada.
+
+```
+git push -f
+```
+
+Com tudo pronto, faça um [Pull Request](https://help.github.com/articles/using-pull-requests/) novamente para a branch `master`. Lembre-se de utilizar um título descritivo, bem como uma descrição do que foi realizado, para facilitar o Code Review. Na mensagem do Pull Request inclua um link para o issue (caso exista).
+
+Copie o link do pull request e cole no Slack, mencionando os pontenciais revisores para o seu código.
+
+### <a name="git-workflow-merge">Code Review e Merge
+
+Se você foi chamado para revisar uma feature, tente fazer o quanto antes. 
+Você não precisa parar tudo o que está fazendo para fazer o Code Review, mas no primeiro
+intervalo que tiver, faça. Lembre-se, logo mais será você que precisará ter seu código
+revisado.
+
+Não procure revisar a sintaxe do código, para isso temos o CI. O objetivo no code review
+é analisar a abordagem ao problema, entender como a solução aplicada se relaciona ao
+restante da aplicação, procurar falhas de segurança que podem ser exploradas,
+verificar pontos que não foram cobertos por testes e principalmente absorver o conhecimento
+desse novo trecho que código, para que você também possa modificá-lo no futuro.
+
+Caso encontre problemas, comente no código. Caso esteja tudo OK, comente no Pull Request, sinalizando
+que está tudo certo e o Merge pode ser realizado.
+
+Após receber a confirmação de que está tudo OK, realize o merge e apague sua branch.
+
 
 # <a name="languages">Linguagens e Frameworks
 
 Para cada linguagem e framework temos um conjunto de regras e boas práticas.
-Siga as boas práticas para não ser barrado pelo QA :)
+Siga as boas práticas para não ser barrado pelo CI ou no Code Review :)
 
 ## <a name="ruby">Ruby
 
@@ -169,13 +221,12 @@ As boas práticas e regras que usamos quando usamos Ruby são as seguintes:
 
 * Uma sprint task nunca pode ser considerada feita se não passar nos seguintes 
   testes:
-  * RuboCop (Ruby Style Guide Compliance)
-  * SCSS Lint
-  * Brakeman (Segurança)
-  * Flay (Assegura um código DRY)
-  * JSHint
-  * Rails Best Practices
-  * Reek (Code Smell, apenas para models)
+  * [RuboCop (Ruby Style Guide Compliance)](https://github.com/bbatsov/rubocop)
+  * [SCSS Lint](https://github.com/brigade/scss-lint)
+  * [Brakeman (Segurança)](http://brakemanscanner.org/)
+  * [JSHint](http://eslint.org/)
+ 
+ * Todos os testes acima são executados automaticamente pelo CircleCI.
 
 ### Stack
 
@@ -190,15 +241,16 @@ listado abaixo:
 | Processamento de Queues | [Sidekiq](https://github.com/mperham/sidekiq) |
 | Autenticação | [Devise](https://github.com/plataformatec/devise) |
 | Autorização | [CanCanCan](https://github.com/CanCanCommunity/cancancan) |
-| Formulários Easy Breezy | [Simple Form](https://github.com/plataformatec/simple_form) |
 | Upload | [Carrier Wave](https://github.com/carrierwaveuploader/carrierwave) |
 | Jobs Recorrentes/Cron | [Whenever](https://github.com/javan/whenever) |
 | Paginação | [Kaminari](https://github.com/amatsuda/kaminari) |
-| Caching | [Redis](https://github.com/redis-store/redis-rails) |
+| Caching | [Redis](https://github.com/redis-store/redis-rails), [Dalli](https://github.com/petergoldstein/dalli) |
 | Multi-Tenancy | [Apartment](https://github.com/influitive/apartment) |
-| Respostas de API | [Serializers](https://github.com/rails-api/active_model_serializers) |
-| Testes | [RSpec](https://github.com/rspec/rspec) |
+| Respostas de API | [Serializers](https://github.com/rails-api/active_model_serializers), [JBuilder](https://github.com/rails/jbuilder) |
+| Testes | [RSpec](https://github.com/rspec/rspec), [Rspec API Documentation](https://github.com/zipmark/rspec_api_documentation) |
 | Factories | [Factory Girl](https://github.com/thoughtbot/factory_girl) |
+| Deploy | [Capistrano](http://capistranorb.com/) |
+| Criptografia | [DotGPG](https://github.com/ConradIrwin/dotgpg) |
 
 # <a name="methodologies">Práticas e Metodologias
 
@@ -213,7 +265,7 @@ As regras são:
 * Quebrar algo numa _feature_ branch não tem problema, se você ainda estiver
   trabalhando nela.
 
-* Se você por acaso quebrar a branch _develop_, você deve parar tudo o que 
+* Se você por acaso quebrar a branch _master_, você deve parar tudo o que 
   estiver fazendo para consertá-la. (Quem quebra arruma).
 
 ## <a name="tdd">Test-Driven Development
@@ -222,50 +274,25 @@ Usamos a metodologia de Test-Driven Development quando é conveniente, mas não
 somos completamente ortodoxos: usamos quando faz sentido.
 
 Sempre é bom, no entanto, ter uma visão geral do problema e da estrutura para
-evitar o retrabalho. Para isso, discutimos exaustivamente no _sprint planning_
-e antes de o projeto começar.
+evitar o retrabalho. Para isso, utilizamos o _sprint planning_ para debater
+o problema e tentar definir a melhor abordagem para ele.
 
 ## <a name="tests">Testes e Coverage
 
-Como regra geral, testamos apenas **Testes de Integração** e de **Models**.
+Criamos testes de integração para APIs utilizando _RSpec Api Documentation_ e para
+aplicações web com _Capybara_. Para testes unitários, procuramos testar _models_ e qualquer
+outra classe de serviço que a aplicação venha a ter (Service Objects, Workers, etc.)
+
+Com excessão de testes mais complexos, procuramos fazer o menor uso possível de mocks,
+mesmo que isso leve diversos testes a quebrarem com apenas uma mudança. O objetivo é 
+procurar diminuir a dependência dos testes de uma implementação específica e simplificar
+a leitura dos testes.
+
+Utilizamos o modelo de quatro etapas para a escrita dos testes:
+
+- Configuração: Criamos os objetivos de que dependem os testes.
+- Teste: Executamos o teste.
+- Verificação: Verificamos se os resultados dos testes foram os esperados.
+- Limpeza: Limpeza dos dados criados para o teste. (normalmente executada automaticamente, através do Database Cleaner).
 
 Miramos em 95% de coverage no código.
-
-# <a name="practical-guides">Guias Práticos
-
-## <a name="git-workflow">Git Workflow
-
-Para começar uma nova Feature associado a uma issue é necessário seguir os seguintes passos:
-
-### Criando nova Feature
-
-Garanta que o seu repositório de Development esteja atualizado:
-
-```
-# acessar a pasta onde está o código fonte
-gem install git-up --no-doc --no-ri # caso não esteja instalado
-git-up
-```
-
-Criar uma nova branch:
-
-```
-git checkout -b nome_branch
-```
-
-Realizar as alterações necessárias no código, e ao final seguir os seguintes passos:
-
-```
-git status # para verificar quais foram as atualizações realizadas
-git add -A # adicionar os arquivos alterados para efetuar o commit
-git commit -m "Descrição das alterações"
-git up # atuliza todos os seus branchs
-git merge development # para trazer todas as alterações realizadas no development para o seu branch e evitar conflitos.
-git push origin nome_branch # efetua o "push" para o GitHub
-```
-
-Entrar na página do repositório onde foi realizado o push e criar um Pull Request https://help.github.com/articles/using-pull-requests/ **Atentar na escolha do base:, sempre selecionar development.**
-
-Na descrição do pull request criado incluir uma das palavras chave para linka-lo a Issue https://help.github.com/articles/closing-issues-via-commit-messages/
-
-Feito isso agora é aguardar para que alguem verifique o seu request e efetue o Merge ou seja necessário efetuar algum ajuste na alteração enviada. Caso isso ocorra, quem estiver analisando vai inserir um comentário no pull request.
