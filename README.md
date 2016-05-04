@@ -226,7 +226,7 @@ As boas práticas e regras que usamos quando usamos Ruby são as seguintes:
   * [Brakeman (Segurança)](http://brakemanscanner.org/)
   * [JSHint](http://eslint.org/)
  
- * Todos os testes acima são executados automaticamente pelo CircleCI.
+ * Todos os testes acima são executados automaticamente pela plataforma de integração contínua CircleCI.
 
 ### Stack
 
